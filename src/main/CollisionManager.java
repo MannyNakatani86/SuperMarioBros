@@ -1,5 +1,6 @@
 package main;
 
+import objects.Enemy;
 import objects.GameObject;
 import objects.Mario;
 
@@ -11,6 +12,7 @@ public class CollisionManager {
 		this.pm = pm;
 	}
 	
+	// Collision with tiles
 	public void checkTileCollision(GameObject obj) {
 		int col = 0, row = 0;
 		boolean bottomCollision = false;
@@ -86,6 +88,62 @@ public class CollisionManager {
 	
 	private boolean isCollidingTileFromRight(GameObject obj, int col, int row) {
 		return obj.world_y + pm.tileSize - 1 > row * pm.tileSize && obj.world_x + pm.tileSize - 9 > (col + 1) * pm.tileSize && obj.velX <= 0;
+	}
+	
+	// Collision with objects
+	public void checkEnemyCollision(GameObject obj, Enemy e) {
+		if(isOverlappingEnemy(obj, e)) {
+			if(isCollidingEnemyFromTop(obj, e)) {
+				
+			}
+			if(isCollidingEnemyFromBottom(obj, e)) {
+				
+			}else {
+				if(isCollidingEnemyFromLeft(obj, e)) {
+					obj.manageRight(e.world_x - pm.tileSize);
+				}
+				if(isCollidingEnemyFromRight(obj, e)) {
+					obj.manageLeft(e.world_x + pm.tileSize);
+				}
+			}
+		}
+	}
+	
+	private boolean isOverlappingEnemy(GameObject obj, Enemy e) {
+		if(obj instanceof Mario) {
+			if(obj.world_x + pm.tileSize - 9 + obj.velX > e.world_x &&
+					obj.world_x + obj.velX < e.world_x + pm.tileSize &&
+					obj.world_y + pm.tileSize + obj.velY > e.world_y &&
+					obj.world_y + obj.velY < e.world_y + pm.tileSize ) {
+				return true;
+			}
+		}else {
+			if(obj != e) {
+				if(obj.world_x + pm.tileSize + obj.velX > e.world_x &&
+						obj.world_x + obj.velX < e.world_x + pm.tileSize &&
+						obj.world_y + pm.tileSize + obj.velY > e.world_y &&
+						obj.world_y + obj.velY < e.world_y + pm.tileSize ) {
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
+	private boolean isCollidingEnemyFromTop(GameObject obj, Enemy e) {
+		return obj.world_y + pm.tileSize < e.world_y + pm.tileSize && obj.velY >= 0;
+	}
+	
+	private boolean isCollidingEnemyFromBottom(GameObject obj, Enemy e) {
+		return obj.world_y > e.world_y + pm.tileSize && obj.velY <= 0;
+	}
+	
+	private boolean isCollidingEnemyFromLeft(GameObject obj, Enemy e) {
+		return obj.world_y + pm.tileSize - 1 > e.world_y && obj.world_x < e.world_x && obj.velX >= 0;
+	}
+	
+	private boolean isCollidingEnemyFromRight(GameObject obj, Enemy e) {
+		return obj.world_y + pm.tileSize - 1 > e.world_y && obj.world_x + pm.tileSize - 9 > e.world_x + pm.tileSize && obj.velX <= 0;
 	}
 
 }

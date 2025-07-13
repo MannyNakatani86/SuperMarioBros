@@ -28,6 +28,7 @@ public class Goomba extends Enemy{
 	}
 	
 	public void manageRight(int x) {
+		System.out.println("manageRight");
 		world_x = x;
 		lookRight = false;
 	}
@@ -51,6 +52,9 @@ public class Goomba extends Enemy{
 			manageMovement();
 			applyGravity();
 			pm.cManager.checkTileCollision(this);
+			for(int i = 0; i < pm.enemies.length; i++) {
+				pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
+			}
 			
 			world_x += velX;
 			world_y += velY;
