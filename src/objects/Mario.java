@@ -12,11 +12,14 @@ public class Mario extends GameObject{
 
 	String form;
 	boolean jump, crouch;
+	public BufferedImage stillR, stillL, jumpR, jumpL, left1, left2, left3, 
+	right1, right2, right3, big_stillR, big_stillL, big_jumpR, big_jumpL, big_left1,
+	big_left2, big_left3, big_right1, big_right2, big_right3;
 
 	public Mario(PlayManager pm) {
 		super(pm);
 		screen_x = pm.tileSize * 3;
-		screen_y = pm.tileSize * 13 + 1;
+		screen_y = pm.tileSize * 12 + 1;
 		lookRight = true;
 		form = "big";
 		
@@ -26,7 +29,8 @@ public class Mario extends GameObject{
 	
 	public void setDefaultValues() {
 		world_x = pm.tileSize * 3;
-		world_y = pm.tileSize * 13 + 1;
+		world_y = pm.tileSize * 12 + 1;
+		height = pm.tileSize * 2;
 	}
 	
 	public void getImage() {
@@ -41,8 +45,26 @@ public class Mario extends GameObject{
 			right1 = ImageIO.read(getClass().getResourceAsStream("/mario/mario_moveR1.png"));
 			right2 = ImageIO.read(getClass().getResourceAsStream("/mario/mario_moveR2.png"));
 			right3 = ImageIO.read(getClass().getResourceAsStream("/mario/mario_moveR3.png"));
+			big_stillR = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_stillR.png"));
+			big_stillL = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_stillL.png"));
+			big_jumpR = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_jumpR.png"));
+			big_jumpL = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_jumpL.png"));
+			big_left1 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveL1.png"));
+			big_left2 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveL2.png"));
+			big_left3 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveL3.png"));
+			big_right1 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveR1.png"));
+			big_right2 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveR2.png"));
+			big_right3 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveR3.png"));
 		}catch(IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void levelDown() {
+		if(form.equals("big")){
+			form = "small";
+			world_y += pm.tileSize;
+			height = pm.tileSize;
 		}
 	}
 	
@@ -81,6 +103,12 @@ public class Mario extends GameObject{
 		jump = false;
 		crouch = false;
 		velX = 0;
+	}
+	
+	public void manageLanding(int y) {
+		world_y = y - height + 1;
+		onFeet = true;
+		velY = 0;
 	}
 
 	public void manageRight(int x) {
@@ -136,10 +164,13 @@ public class Mario extends GameObject{
 		manageJump();
 		applyGravity();
 		pm.cManager.checkTileCollision(this);
+		for(int i = 0; i < pm.enemies.length; i++) {
+			pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
+		}
 		
 		world_x += velX;
 		world_y += velY;
-		screen_y += velY;
+		screen_y = world_y;
 		
 		spriteCounter++;
 		if(spriteCounter > 5) {
@@ -194,40 +225,40 @@ public class Mario extends GameObject{
 		}else if(form.equals("big")) {
 			if(lookRight) {
 				if(!onFeet){
-					image = jumpR;
+					image = big_jumpR;
 				}else if(run) {
 					if(spriteNum == 1) {
-						image = right1;
+						image = big_right1;
 					}
 					if(spriteNum == 2) {
-						image = right2;
+						image = big_right2;
 					}
 					if(spriteNum == 3) {
-						image = right3;
+						image = big_right3;
 					}
 				}else {
-					image = stillR;
+					image = big_stillR;
 				}
 			}else {
 				if(!onFeet) {
-					image = jumpL;
+					image = big_jumpL;
 				}else if(run) {
 					if(spriteNum == 1) {
-						image = left1;
+						image = big_left1;
 					}
 					if(spriteNum == 2) {
-						image = left2;
+						image = big_left2;
 					}
 					if(spriteNum == 3) {
-						image = left3;
+						image = big_left3;
 					}
 				}else {
-					image = stillL;
+					image = big_stillL;
 				}
 			}
 		}
 		
 		
-		g2.drawImage(image, screen_x, screen_y, pm.tileSize, pm.tileSize, null);
+		g2.drawImage(image, screen_x, screen_y, pm.tileSize, height, null);
 	}
 }

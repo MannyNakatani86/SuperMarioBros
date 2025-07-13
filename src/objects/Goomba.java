@@ -15,6 +15,7 @@ public class Goomba extends Enemy{
 	public Goomba(PlayManager pm) {
 		super(pm);
 		lookRight = false;
+		height = pm.tileSize;
 		
 		getImage();
 	}
@@ -29,8 +30,14 @@ public class Goomba extends Enemy{
 		}
 	}
 	
+	public void manageLanding(int y) {
+		world_y = y - height + 1;
+		screen_y = world_y;
+		onFeet = true;
+		velY = 0;
+	}
+	
 	public void manageRight(int x) {
-		System.out.println("manageRight");
 		world_x = x;
 		lookRight = false;
 	}
@@ -62,8 +69,8 @@ public class Goomba extends Enemy{
 		
 		world_x += velX;
 		world_y += velY;
-		screen_x += velX;
-		screen_y += velY;
+		screen_x += velX;;
+		screen_y -= velY;
 		
 		spriteCounter++;
 		if(spriteCounter > 10) {
@@ -86,7 +93,7 @@ public class Goomba extends Enemy{
 		int screen_x = world_x - pm.mario.world_x + pm.mario.screen_x;
 		int screen_y = world_y;
 		if(world_x > pm.mario.world_x - pm.mario.screen_x - pm.tileSize && world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 10) {
-			g2.drawImage(image,  screen_x,  screen_y,  pm.tileSize, pm.tileSize, null);
+			g2.drawImage(image,  screen_x,  screen_y,  pm.tileSize, height, null);
 		}
 	}
 

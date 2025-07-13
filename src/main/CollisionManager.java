@@ -21,7 +21,7 @@ public class CollisionManager {
 				if(isOverlappingTile(obj, col, row)) {
 					if(isCollidingTileFromTop(obj, row)) {
 						bottomCollision = true;
-						obj.manageLanding((row - 1) * pm.tileSize);
+						obj.manageLanding(row * pm.tileSize);
 					}
 					if(isCollidingTileFromBottom(obj, row)) {
 						obj.manageUp((row + 1) * pm.tileSize);
@@ -58,14 +58,14 @@ public class CollisionManager {
 			if(obj instanceof Mario) {
 				if(obj.world_x + pm.tileSize - 9 + obj.velX > col * pm.tileSize &&
 						obj.world_x + obj.velX < (col + 1) * pm.tileSize &&
-						obj.world_y + pm.tileSize + obj.velY > row * pm.tileSize &&
+						obj.world_y + obj.height + obj.velY > row * pm.tileSize &&
 						obj.world_y + obj.velY < (row + 1) * pm.tileSize) {
 					return true;
 				}
 			}else {
 				if(obj.world_x + pm.tileSize + obj.velX > col * pm.tileSize &&
 						obj.world_x + obj.velX < (col + 1) * pm.tileSize &&
-						obj.world_y + pm.tileSize + obj.velY > row * pm.tileSize &&
+						obj.world_y + obj.height + obj.velY > row * pm.tileSize &&
 						obj.world_y + obj.velY < (row + 1) * pm.tileSize) {
 					return true;
 				}
@@ -75,7 +75,7 @@ public class CollisionManager {
 	}
 	
 	private boolean isCollidingTileFromTop(GameObject obj, int row) {
-		return obj.world_y + pm.tileSize < (row + 1) * pm.tileSize && obj.velY >= 0;
+		return obj.world_y + obj.height < (row + 1) * pm.tileSize && obj.velY >= 0;
 	}
 	
 	private boolean isCollidingTileFromBottom(GameObject obj, int row) {
@@ -83,11 +83,11 @@ public class CollisionManager {
 	}
 	
 	private boolean isCollidingTileFromLeft(GameObject obj, int col, int row) {
-		return obj.world_y + pm.tileSize - 1 > row * pm.tileSize && obj.world_x < col * pm.tileSize && obj.velX >= 0;
+		return obj.world_y + obj.height - 1 > row * pm.tileSize && obj.world_x < col * pm.tileSize && obj.velX >= 0;
 	}
 	
 	private boolean isCollidingTileFromRight(GameObject obj, int col, int row) {
-		return obj.world_y + pm.tileSize - 1 > row * pm.tileSize && obj.world_x + pm.tileSize - 9 > (col + 1) * pm.tileSize && obj.velX <= 0;
+		return obj.world_y + obj.height - 1 > row * pm.tileSize && obj.world_x + pm.tileSize - 9 > (col + 1) * pm.tileSize && obj.velX <= 0;
 	}
 	
 	// Collision with objects
@@ -100,10 +100,18 @@ public class CollisionManager {
 				
 			}else {
 				if(isCollidingEnemyFromLeft(obj, e)) {
-					obj.manageRight(e.world_x - pm.tileSize);
+					if(obj instanceof Mario) {
+						((Mario) obj).levelDown();
+					}else {
+						obj.manageRight(e.world_x - pm.tileSize);
+					}
 				}
 				if(isCollidingEnemyFromRight(obj, e)) {
-					obj.manageLeft(e.world_x + pm.tileSize);
+					if(obj instanceof Mario) {
+						((Mario) obj).levelDown();
+					}else {
+						obj.manageLeft(e.world_x + pm.tileSize);
+					}
 				}
 			}
 		}
@@ -113,7 +121,7 @@ public class CollisionManager {
 		if(obj instanceof Mario) {
 			if(obj.world_x + pm.tileSize - 9 + obj.velX > e.world_x &&
 					obj.world_x + obj.velX < e.world_x + pm.tileSize &&
-					obj.world_y + pm.tileSize + obj.velY > e.world_y &&
+					obj.world_y + obj.height + obj.velY > e.world_y &&
 					obj.world_y + obj.velY < e.world_y + pm.tileSize ) {
 				return true;
 			}
@@ -121,7 +129,7 @@ public class CollisionManager {
 			if(obj != e) {
 				if(obj.world_x + pm.tileSize + obj.velX > e.world_x &&
 						obj.world_x + obj.velX < e.world_x + pm.tileSize &&
-						obj.world_y + pm.tileSize + obj.velY > e.world_y &&
+						obj.world_y + obj.height + obj.velY > e.world_y &&
 						obj.world_y + obj.velY < e.world_y + pm.tileSize ) {
 					return true;
 				}
@@ -131,19 +139,19 @@ public class CollisionManager {
 	}
 	
 	private boolean isCollidingEnemyFromTop(GameObject obj, Enemy e) {
-		return obj.world_y + pm.tileSize < e.world_y + pm.tileSize && obj.velY >= 0;
+		return obj.world_y + obj.height < e.world_y + e.height && obj.velY >= 0;
 	}
 	
 	private boolean isCollidingEnemyFromBottom(GameObject obj, Enemy e) {
-		return obj.world_y > e.world_y + pm.tileSize && obj.velY <= 0;
+		return obj.world_y > e.world_y + e.height && obj.velY <= 0;
 	}
 	
 	private boolean isCollidingEnemyFromLeft(GameObject obj, Enemy e) {
-		return obj.world_y + pm.tileSize - 1 > e.world_y && obj.world_x < e.world_x && obj.velX >= 0;
+		return obj.world_y + obj.height - 1 > e.world_y && obj.world_x < e.world_x && obj.velX >= 0;
 	}
 	
 	private boolean isCollidingEnemyFromRight(GameObject obj, Enemy e) {
-		return obj.world_y + pm.tileSize - 1 > e.world_y && obj.world_x + pm.tileSize - 9 > e.world_x + pm.tileSize && obj.velX <= 0;
+		return obj.world_y + obj.height - 1 > e.world_y && obj.world_x + obj.height - 9 > e.world_x + e.height && obj.velX <= 0;
 	}
 
 }

@@ -27,6 +27,13 @@ public class KoopaTroopa extends Enemy{
 		}
 	}
 	
+	public void manageLanding(int y) {
+		world_y = y - height + 1;
+		screen_y = world_y;
+		onFeet = true;
+		velY = 0;
+	}
+	
 	public void manageRight(int x) {
 		world_x = x;
 		lookRight = false;

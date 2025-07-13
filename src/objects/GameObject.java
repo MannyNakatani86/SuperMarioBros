@@ -1,7 +1,5 @@
 package objects;
 
-import java.awt.image.BufferedImage;
-
 import main.PlayManager;
 
 public abstract class GameObject {
@@ -10,10 +8,9 @@ public abstract class GameObject {
 	// Location
 	public int world_x, world_y;
 	public int screen_x, screen_y;
+	public int height;
 	// Movements
 	public int velX, velY;
-	
-	public BufferedImage stillR, stillL, jumpR, jumpL, left1, left2, left3, right1, right2, right3;
 	public boolean onFeet = true, walk, run, lookRight;
 	
 	public int spriteCounter = 0;
@@ -23,12 +20,7 @@ public abstract class GameObject {
 		this.pm = pm;
 	}
 	
-	public void manageLanding(int y) {
-		world_y = y + 1;
-		screen_y = y + 1;
-		onFeet = true;
-		velY = 0;
-	}
+	public abstract void manageLanding(int y);
 	
 	public void manageUp(int y) {
 		world_y = y;
