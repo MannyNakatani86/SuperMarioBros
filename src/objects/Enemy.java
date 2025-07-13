@@ -8,6 +8,7 @@ import main.PlayManager;
 public abstract class Enemy extends GameObject{
 	
 	public BufferedImage image;
+	public boolean canMove = false;
 
 	public Enemy(PlayManager pm) {
 		super(pm);

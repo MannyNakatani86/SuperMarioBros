@@ -51,7 +51,7 @@ public class AssetSetter {
 		pm.enemies[7].world_x = 100 * pm.tileSize;
 		pm.enemies[7].world_y = 13 * pm.tileSize + 1;
 		
-		pm.enemies[8] = new KoopaTroopa(pm);
+		pm.enemies[8] = new Goomba(pm); // should be koopa troopa
 		pm.enemies[8].world_x = 108 * pm.tileSize;
 		pm.enemies[8].world_y = 12 * pm.tileSize + 1;
 		

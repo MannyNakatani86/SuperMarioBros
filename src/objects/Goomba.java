@@ -20,10 +20,12 @@ public class Goomba extends Enemy{
 	}
 	
 	private void manageMovement() {
-		if(lookRight) {
-			velX = 1;
-		}else {
-			velX = -1;
+		if(canMove) {
+			if(lookRight) {
+				velX = 1;
+			}else {
+				velX = -1;
+			}
 		}
 	}
 	
@@ -48,28 +50,29 @@ public class Goomba extends Enemy{
 	}
 	
 	public void update() {
-		if(world_x > pm.mario.world_x - pm.mario.screen_x - pm.tileSize && world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 10 ) {
-			manageMovement();
-			applyGravity();
-			pm.cManager.checkTileCollision(this);
-			for(int i = 0; i < pm.enemies.length; i++) {
-				pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
+		if(world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 14) {
+			canMove = true;
+		}
+		manageMovement();
+		applyGravity();
+		pm.cManager.checkTileCollision(this);
+		for(int i = 0; i < pm.enemies.length; i++) {
+			pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
+		}
+		
+		world_x += velX;
+		world_y += velY;
+		screen_x += velX;
+		screen_y += velY;
+		
+		spriteCounter++;
+		if(spriteCounter > 10) {
+			if(spriteNum == 1) {
+				spriteNum = 2;
+			}else if(spriteNum == 2) {
+				spriteNum = 1;
 			}
-			
-			world_x += velX;
-			world_y += velY;
-			screen_x += velX;
-			screen_y += velY;
-			
-			spriteCounter++;
-			if(spriteCounter > 10) {
-				if(spriteNum == 1) {
-					spriteNum = 2;
-				}else if(spriteNum == 2) {
-					spriteNum = 1;
-				}
-				spriteCounter = 0;
-			}
+			spriteCounter = 0;
 		}
 	}
 	
