@@ -2,6 +2,7 @@ package main;
 
 import objects.Enemy;
 import objects.GameObject;
+import objects.Items;
 import objects.Mario;
 
 public class CollisionManager {
@@ -205,5 +206,37 @@ public class CollisionManager {
 			}
 		}
 	}
+	
+	// Collision with items for Mario
+	public void checkItemCollision(GameObject obj, Items i) {
+		if(obj != null && i != null) {
+			if(isOverlappingItem(obj, i)) {
+				if(isCollidingItemFromBottom(obj, i)) {
+					if(i.hitCount == 0) {
+						i.visible = true;
+						i.hitCount ++;
+					}
+				}
+				((Mario) obj).levelUp(i.name);
+			}
+		}
+	}
+	
+	private boolean isOverlappingItem(GameObject obj, Items i) {
+		if(obj instanceof Mario) {
+			if(obj.world_x + pm.tileSize - 9 + obj.velX > i.world_x &&
+					obj.world_x + obj.velX < i.world_x + pm.tileSize &&
+					obj.world_y + obj.height + obj.velY > i.world_y &&
+					obj.world_y + obj.velY < i.world_y + pm.tileSize ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private boolean isCollidingItemFromBottom(GameObject obj, Items i) {
+		return obj.world_y > i.world_y + pm.tileSize && obj.velY <= 0;
+	}
+	
 
 }

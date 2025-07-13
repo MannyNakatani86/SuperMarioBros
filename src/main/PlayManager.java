@@ -74,20 +74,26 @@ public class PlayManager {
 					}
 				}
 			}
+			for(int i = 0; i < items.length; i++) {
+				if(items[i] != null) {
+					cManager.checkItemCollision(mario, items[i]);
+					items[i].update();
+				}
+			}
 		}
 		mario.update();
 	}
 	
 	public void draw(Graphics2D g2) {
-		for(int i = 0; i < items.length; i++) {
-			if(items[i] != null) {
-				items[i].draw(g2,  this);
-			}
-		}
 		tManager.draw(g2);
 		for(int i = 0; i < enemies.length; i++) {
 			if(enemies[i] != null) {
 				enemies[i].draw(g2,  this);
+			}
+		}
+		for(int i = 0; i < items.length; i++) {
+			if(items[i] != null) {
+				items[i].draw(g2,  this);
 			}
 		}
 		mario.draw(g2);

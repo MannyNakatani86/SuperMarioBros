@@ -14,7 +14,7 @@ public class AssetSetter {
 	
 	public void setItems() {
 		pm.items[0] = new Mushroom();
-		pm.items[0].world_x = 22 * pm.tileSize;
+		pm.items[0].world_x = 21 * pm.tileSize;
 		pm.items[0].world_y = 10 * pm.tileSize;
 	}
 	

@@ -21,9 +21,9 @@ public class Mario extends GameObject{
 	public Mario(PlayManager pm) {
 		super(pm);
 		screen_x = pm.tileSize * 3;
-		screen_y = pm.tileSize * 13 + 1;
+		screen_y = pm.tileSize * 12 + 1;
 		lookRight = true;
-		form = "small";
+		form = "big";
 		
 		setDefaultValues();
 		getImage();
@@ -31,8 +31,8 @@ public class Mario extends GameObject{
 	
 	public void setDefaultValues() {
 		world_x = pm.tileSize * 3;
-		world_y = pm.tileSize * 13 + 1;
-		height = pm.tileSize;
+		world_y = pm.tileSize * 12 + 1;
+		height = pm.tileSize * 2;
 	}
 	
 	public void getImage() {
@@ -64,6 +64,16 @@ public class Mario extends GameObject{
 			goalL = ImageIO.read(getClass().getResourceAsStream("/mario/mario_goalL.png"));
 		}catch(IOException e) {
 			e.printStackTrace();
+		}
+	}
+	
+	public void levelUp(String item) {
+		if(form.equals("small")) {
+			form = "big";
+			world_y -= pm.tileSize;
+			height = pm.tileSize * 2;
+		}else {
+			
 		}
 	}
 	
@@ -157,7 +167,7 @@ public class Mario extends GameObject{
 	private void manageJump() {
 		if(jump && onFeet) {
 			onFeet = false;
-			velY = -36; // initial jumping speed
+			velY = - 36; // initial jumping speed
 			pm.playSE(1);
 		}
 		jump = false;
