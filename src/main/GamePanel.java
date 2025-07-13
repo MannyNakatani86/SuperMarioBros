@@ -20,6 +20,8 @@ public class GamePanel extends JPanel implements Runnable{
 	public final int maxWorldCol = 224, maxWorldRow = 16;
 	public final int worldWidth = tileSize * maxWorldCol, worldHeight = tileSize * maxWorldRow;
 	
+	public boolean gameOver;
+	
 	Thread gameThread;
 	PlayManager pm;
 	
@@ -43,17 +45,19 @@ public class GamePanel extends JPanel implements Runnable{
 		double delta = 0;
 		long lastTime = System.nanoTime();
 		long currentTime;
-		
+			
 		while(gameThread != null) {
-			currentTime = System.nanoTime();
-			
-			delta += (currentTime - lastTime) / drawInterval;
-			lastTime = currentTime;
-			
-			if(delta >= 1) {
-				update();
-				repaint();
-				delta--;
+			if(!pm.gameOver) {
+				currentTime = System.nanoTime();
+					
+				delta += (currentTime - lastTime) / drawInterval;
+				lastTime = currentTime;
+					
+				if(delta >= 1) {
+					update();
+					repaint();
+					delta--;
+				}
 			}
 		}
 	}

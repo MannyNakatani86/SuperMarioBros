@@ -9,6 +9,7 @@ import objects.TileManager;
 
 public class PlayManager {
 	
+	public boolean gameOver;
 	// Constants
 	public int tileSize, maxScreenCol, maxScreenRow, maxWorldCol, maxWorldRow;
 	// Objects
@@ -58,10 +59,12 @@ public class PlayManager {
 	}
 	
 	public void update() {
-		handleInput();
-		for(int i = 0; i < enemies.length; i++) {
-			if(enemies[i] != null) {
-				enemies[i].update();
+		if(!mario.dead) {
+			handleInput();
+			for(int i = 0; i < enemies.length; i++) {
+				if(enemies[i] != null) {
+					enemies[i].update();
+				}
 			}
 		}
 		mario.update();
