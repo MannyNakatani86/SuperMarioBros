@@ -10,6 +10,7 @@ import main.PlayManager;
 
 public class Mario extends GameObject{
 
+	String form;
 	boolean jump, crouch;
 
 	public Mario(PlayManager pm) {
@@ -17,6 +18,7 @@ public class Mario extends GameObject{
 		screen_x = pm.tileSize * 3;
 		screen_y = pm.tileSize * 13 + 1;
 		lookRight = true;
+		form = "big";
 		
 		setDefaultValues();
 		getImage();
@@ -155,40 +157,77 @@ public class Mario extends GameObject{
 	
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
-		if(lookRight) {
-			if(!onFeet){
-				image = jumpR;
-			}else if(run) {
-				if(spriteNum == 1) {
-					image = right1;
-				}
-				if(spriteNum == 2) {
-					image = right2;
-				}
-				if(spriteNum == 3) {
-					image = right3;
+		if(form.equals("small")) {
+			if(lookRight) {
+				if(!onFeet){
+					image = jumpR;
+				}else if(run) {
+					if(spriteNum == 1) {
+						image = right1;
+					}
+					if(spriteNum == 2) {
+						image = right2;
+					}
+					if(spriteNum == 3) {
+						image = right3;
+					}
+				}else {
+					image = stillR;
 				}
 			}else {
-				image = stillR;
+				if(!onFeet) {
+					image = jumpL;
+				}else if(run) {
+					if(spriteNum == 1) {
+						image = left1;
+					}
+					if(spriteNum == 2) {
+						image = left2;
+					}
+					if(spriteNum == 3) {
+						image = left3;
+					}
+				}else {
+					image = stillL;
+				}
 			}
-		}else {
-			if(!onFeet) {
-				image = jumpL;
-			}else if(run) {
-				if(spriteNum == 1) {
-					image = left1;
-				}
-				if(spriteNum == 2) {
-					image = left2;
-				}
-				if(spriteNum == 3) {
-					image = left3;
+		}else if(form.equals("big")) {
+			if(lookRight) {
+				if(!onFeet){
+					image = jumpR;
+				}else if(run) {
+					if(spriteNum == 1) {
+						image = right1;
+					}
+					if(spriteNum == 2) {
+						image = right2;
+					}
+					if(spriteNum == 3) {
+						image = right3;
+					}
+				}else {
+					image = stillR;
 				}
 			}else {
-				image = stillL;
+				if(!onFeet) {
+					image = jumpL;
+				}else if(run) {
+					if(spriteNum == 1) {
+						image = left1;
+					}
+					if(spriteNum == 2) {
+						image = left2;
+					}
+					if(spriteNum == 3) {
+						image = left3;
+					}
+				}else {
+					image = stillL;
+				}
 			}
 		}
+		
+		
 		g2.drawImage(image, screen_x, screen_y, pm.tileSize, pm.tileSize, null);
 	}
-
 }
