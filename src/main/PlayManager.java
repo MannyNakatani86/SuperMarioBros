@@ -17,6 +17,7 @@ public class PlayManager {
 	TileManager tManager;
 	public CollisionManager cManager;
 	public AssetSetter aSetter;
+	Sound sound = new Sound();
 	public Items items[];
 	public Enemy enemies[];
 	
@@ -56,14 +57,21 @@ public class PlayManager {
 	public void setUpItems() {
 		aSetter.setItems();
 		aSetter.setEnemies();
+		playMusic(0);
 	}
 	
 	public void update() {
+		if(mario.dead) {
+			stopMusic();
+		}
 		if(!mario.dead) {
 			handleInput();
 			for(int i = 0; i < enemies.length; i++) {
 				if(enemies[i] != null) {
 					enemies[i].update();
+					if(enemies[i].dead) {
+						enemies[i] = null;
+					}
 				}
 			}
 		}
@@ -83,5 +91,20 @@ public class PlayManager {
 			}
 		}
 		mario.draw(g2);
+	}
+	
+	public void playMusic(int i) {
+		sound.setMusicFile(i);
+		sound.playMusic();
+		sound.loop(); // this is for background
+	}
+	
+	public void stopMusic() {
+		sound.stopMusic();
+	}
+	
+	public void playSE(int i) {
+		sound.setSEFile(i);
+		sound.playSE();
 	}
 }

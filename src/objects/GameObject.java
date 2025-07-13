@@ -13,6 +13,7 @@ public abstract class GameObject {
 	public int velX, velY;
 	public boolean onFeet = true, walk, run, lookRight;
 	
+	public int deadAnimationCounter = 0;
 	public int spriteCounter = 0;
 	public int spriteNum = 1;
 	

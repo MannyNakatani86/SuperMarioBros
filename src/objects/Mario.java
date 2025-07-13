@@ -11,7 +11,6 @@ import main.PlayManager;
 public class Mario extends GameObject{
 
 	String form;
-	int deadAnimationCounter = 0;
 	boolean jump, crouch;
 	public boolean dead;
 	public BufferedImage stillR, stillL, jumpR, jumpL, left1, left2, left3, 
@@ -145,10 +144,16 @@ public class Mario extends GameObject{
 		}
 	}
 	
+	public void littleJump() {
+		velY = -20;
+		pm.playSE(3);
+	}
+	
 	private void manageJump() {
 		if(jump && onFeet) {
 			onFeet = false;
 			velY = -36; // initial jumping speed
+			pm.playSE(1);
 		}
 		jump = false;
 	}
@@ -180,6 +185,7 @@ public class Mario extends GameObject{
 		if(dead) {
 			if(deadAnimationCounter == 0) {
 				deadAnimationJump();
+				pm.playSE(2);
 			}
 			deadAnimationGravity();
 			deadAnimationCounter++;

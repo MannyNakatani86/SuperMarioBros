@@ -14,41 +14,47 @@ public class CollisionManager {
 	
 	// Collision with tiles
 	public void checkTileCollision(GameObject obj) {
-		int col = 0, row = 0;
-		boolean bottomCollision = false;
-		while(col < pm.maxWorldCol && row < pm.maxScreenRow) {
-			while(col < pm.maxWorldCol) {
-				if(isOverlappingTile(obj, col, row)) {
-					if(isCollidingTileFromTop(obj, row)) {
-						bottomCollision = true;
-						obj.manageLanding(row * pm.tileSize);
+		if(obj != null) {
+			int col = 0, row = 0;
+			boolean bottomCollision = false;
+			while(col < pm.maxWorldCol && row < pm.maxScreenRow) {
+				while(col < pm.maxWorldCol) {
+					if(isOverlappingTile(obj, col, row)) {
+						if(isCollidingTileFromTop(obj, row)) {
+							bottomCollision = true;
+							obj.manageLanding(row * pm.tileSize);
+						}
+						if(isCollidingTileFromBottom(obj, row)) {
+							obj.manageUp((row + 1) * pm.tileSize);
+							if(pm.tManager.mapTileNum[col][row] == 3) {
+								pm.tManager.mapTileNum[col][row] = 18; // if question block, change to empty block
+							}
+							if(pm.tManager.mapTileNum[col][row] == 2) {
+								pm.tManager.mapTileNum[col][row] = 0; // if normal block, change to sky
+							}
+						}else {
+							if(isCollidingTileFromLeft(obj, col, row)) {
+								if(obj instanceof Mario) {
+									obj.manageRight((col - 1) * pm.tileSize + 9);
+								}else {
+									obj.manageRight((col - 1) * pm.tileSize);
+								}
+							}
+							if(isCollidingTileFromRight(obj, col, row)) {
+								obj.manageLeft((col + 1) * pm.tileSize);
+							}
+						}
 					}
-					if(isCollidingTileFromBottom(obj, row)) {
-						obj.manageUp((row + 1) * pm.tileSize);
-						if(pm.tManager.mapTileNum[col][row] == 3) {
-							pm.tManager.mapTileNum[col][row] = 18; // if question block, change to empty block
-						}
-						if(pm.tManager.mapTileNum[col][row] == 2) {
-							pm.tManager.mapTileNum[col][row] = 0; // if normal block, change to sky
-						}
-					}else {
-						if(isCollidingTileFromLeft(obj, col, row)) {
-							obj.manageRight((col - 1) * pm.tileSize + 9);
-						}
-						if(isCollidingTileFromRight(obj, col, row)) {
-							obj.manageLeft((col + 1) * pm.tileSize);
-						}
-					}
+					col++;
 				}
-				col++;
+				if(col == pm.maxWorldCol) {
+					col = 0;
+					row++;
+				}
 			}
-			if(col == pm.maxWorldCol) {
-				col = 0;
-				row++;
+			if(!bottomCollision) {
+				obj.onFeet = false;
 			}
-		}
-		if(!bottomCollision) {
-			obj.onFeet = false;
 		}
 	}
 	
@@ -92,25 +98,30 @@ public class CollisionManager {
 	
 	// Collision with objects
 	public void checkEnemyCollision(GameObject obj, Enemy e) {
-		if(isOverlappingEnemy(obj, e)) {
-			if(isCollidingEnemyFromTop(obj, e)) {
-				
-			}
-			if(isCollidingEnemyFromBottom(obj, e)) {
-				
-			}else {
-				if(isCollidingEnemyFromLeft(obj, e)) {
+		if(obj != null && e != null) {
+			if(isOverlappingEnemy(obj, e)) {
+				if(isCollidingEnemyFromTop(obj, e)) {
 					if(obj instanceof Mario) {
-						((Mario) obj).levelDown();
-					}else {
-						obj.manageRight(e.world_x - pm.tileSize);
+						((Mario) obj).littleJump();
+						e.gotHit();
 					}
 				}
-				if(isCollidingEnemyFromRight(obj, e)) {
-					if(obj instanceof Mario) {
-						((Mario) obj).levelDown();
-					}else {
-						obj.manageLeft(e.world_x + pm.tileSize);
+				if(isCollidingEnemyFromBottom(obj, e)) {
+					
+				}else {
+					if(isCollidingEnemyFromLeft(obj, e)) {
+						if(obj instanceof Mario) {
+							((Mario) obj).levelDown();
+						}else {
+							obj.manageRight(e.world_x - pm.tileSize);
+						}
+					}
+					if(isCollidingEnemyFromRight(obj, e)) {
+						if(obj instanceof Mario) {
+							((Mario) obj).levelDown();
+						}else {
+							obj.manageLeft(e.world_x + pm.tileSize);
+						}
 					}
 				}
 			}

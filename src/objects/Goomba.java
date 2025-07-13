@@ -10,7 +10,7 @@ import main.PlayManager;
 
 public class Goomba extends Enemy{
 	
-	public BufferedImage image1, image2;
+	public BufferedImage image1, image2, image3;
 
 	public Goomba(PlayManager pm) {
 		super(pm);
@@ -18,6 +18,10 @@ public class Goomba extends Enemy{
 		height = pm.tileSize;
 		
 		getImage();
+	}
+	
+	public void gotHit() {
+		stepped = true;
 	}
 	
 	private void manageMovement() {
@@ -51,44 +55,56 @@ public class Goomba extends Enemy{
 		try {
 			image1 = ImageIO.read(getClass().getResourceAsStream("/enemy/goomba1.png"));
 			image2 = ImageIO.read(getClass().getResourceAsStream("/enemy/goomba2.png"));
+			image3 = ImageIO.read(getClass().getResourceAsStream("/enemy/goomba3.png"));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void update() {
-		if(world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 14) {
-			canMove = true;
-		}
-		manageMovement();
-		applyGravity();
-		pm.cManager.checkTileCollision(this);
-		for(int i = 0; i < pm.enemies.length; i++) {
-			pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
-		}
-		
-		world_x += velX;
-		world_y += velY;
-		screen_x += velX;;
-		screen_y -= velY;
-		
-		spriteCounter++;
-		if(spriteCounter > 10) {
-			if(spriteNum == 1) {
-				spriteNum = 2;
-			}else if(spriteNum == 2) {
-				spriteNum = 1;
+		if(stepped) {
+			deadAnimationCounter++;
+			if(deadAnimationCounter == 7) {
+				dead = true;
 			}
-			spriteCounter = 0;
+		}else {
+			if(world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 14) {
+				canMove = true;
+			}
+			manageMovement();
+			applyGravity();
+			pm.cManager.checkTileCollision(this);
+			for(int i = 0; i < pm.enemies.length; i++) {
+				pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
+			}
+			
+			world_x += velX;
+			world_y += velY;
+			screen_x += velX;
+			screen_y -= velY;
+			
+			spriteCounter++;
+			if(spriteCounter > 10) {
+				if(spriteNum == 1) {
+					spriteNum = 2;
+				}else if(spriteNum == 2) {
+					spriteNum = 1;
+				}
+				spriteCounter = 0;
+			}
 		}
 	}
 	
 	public void draw(Graphics2D g2, PlayManager pm) {
 		BufferedImage image = null;
-		if(spriteNum == 1) {
-			image = image1;
-		}else if(spriteNum == 2){
-			image = image2;
+		if(stepped) {
+			image = image3;
+		}else {
+			if(spriteNum == 1) {
+				image = image1;
+			}else if(spriteNum == 2){
+				image = image2;
+			}
 		}
 		int screen_x = world_x - pm.mario.world_x + pm.mario.screen_x;
 		int screen_y = world_y;

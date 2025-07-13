@@ -19,6 +19,10 @@ public class KoopaTroopa extends Enemy{
 		getImage();
 	}
 	
+	public void gotHit() {
+		
+	}
+	
 	private void manageMovement() {
 		if(lookRight) {
 			velX = 1;
