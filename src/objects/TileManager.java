@@ -18,7 +18,7 @@ public class TileManager {
 	
 	public TileManager(PlayManager pm) {
 		this.pm = pm;
-		tile = new Tile[20]; // number of tile types
+		tile = new Tile[28]; // number of tile types
 		mapTileNum = new int[pm.maxWorldCol][pm.maxWorldRow];
 		getTileImage();
 		loadMap("/tile/Stage1.1.csv");
@@ -94,6 +94,35 @@ public class TileManager {
 			tile[18] = new Tile();
 			tile[18].image = ImageIO.read(getClass().getResourceAsStream("/tile/empty_block.png"));
 			tile[18].collision = true;
+			
+			tile[19] = new Tile();
+			tile[19].image = ImageIO.read(getClass().getResourceAsStream("/tile/pole.png"));
+			tile[19].collision = true;
+			
+			tile[20] = new Tile();
+			tile[20].image = ImageIO.read(getClass().getResourceAsStream("/tile/pole_top.png"));
+			tile[20].collision = true;
+			
+			tile[21] = new Tile();
+			tile[21].image = ImageIO.read(getClass().getResourceAsStream("/tile/castle1.png"));
+			
+			tile[22] = new Tile();
+			tile[22].image = ImageIO.read(getClass().getResourceAsStream("/tile/castle2.png"));
+			
+			tile[23] = new Tile();
+			tile[23].image = ImageIO.read(getClass().getResourceAsStream("/tile/castle3.png"));
+			
+			tile[24] = new Tile();
+			tile[24].image = ImageIO.read(getClass().getResourceAsStream("/tile/castle4.png"));
+			
+			tile[25] = new Tile();
+			tile[25].image = ImageIO.read(getClass().getResourceAsStream("/tile/castle5.png"));
+			
+			tile[26] = new Tile();
+			tile[26].image = ImageIO.read(getClass().getResourceAsStream("/tile/castle6.png"));
+			
+			tile[27] = new Tile();
+			tile[27].image = ImageIO.read(getClass().getResourceAsStream("/tile/black.png"));
 			
 		} catch (IOException e) {
 			e.printStackTrace();

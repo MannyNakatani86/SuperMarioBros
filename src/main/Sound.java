@@ -10,7 +10,7 @@ public class Sound {
 	
 	Clip musicClip;
 	Clip seClip;
-	URL soundURL[] = new URL[8];
+	URL soundURL[] = new URL[9];
 	
 	public Sound() {
 		soundURL[0] = getClass().getResource("/sound/background.wav");
@@ -21,6 +21,7 @@ public class Sound {
 		soundURL[5] = getClass().getResource("/sound/fireball.wav");
 		soundURL[6] = getClass().getResource("/sound/superMushroom.wav");
 		soundURL[7] = getClass().getResource("/sound/oneUp.wav");
+		soundURL[8] = getClass().getResource("/sound/stageComplete.wav");
 	}
 	
 	public void setMusicFile(int i) {

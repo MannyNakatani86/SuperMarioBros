@@ -47,7 +47,7 @@ public class GamePanel extends JPanel implements Runnable{
 		long currentTime;
 			
 		while(gameThread != null) {
-			if(!pm.gameOver) {
+			if(!pm.gameOver && !pm.gameComplete) {
 				currentTime = System.nanoTime();
 					
 				delta += (currentTime - lastTime) / drawInterval;

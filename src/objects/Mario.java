@@ -12,10 +12,11 @@ public class Mario extends GameObject{
 
 	String form;
 	boolean jump, crouch;
-	public boolean dead;
+	public boolean dead, complete, visible = true;
+	int completeAnimationCounter = 0;
 	public BufferedImage stillR, stillL, jumpR, jumpL, left1, left2, left3, 
 	right1, right2, right3, big_stillR, big_stillL, big_jumpR, big_jumpL, big_left1,
-	big_left2, big_left3, big_right1, big_right2, big_right3, gone;
+	big_left2, big_left3, big_right1, big_right2, big_right3, gone, big_goalR, big_goalL, goalR, goalL;
 
 	public Mario(PlayManager pm) {
 		super(pm);
@@ -57,6 +58,10 @@ public class Mario extends GameObject{
 			big_right2 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveR2.png"));
 			big_right3 = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_moveR3.png"));
 			gone = ImageIO.read(getClass().getResourceAsStream("/mario/mario_dead.png"));
+			big_goalR = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_goalR.png"));
+			big_goalL = ImageIO.read(getClass().getResourceAsStream("/mario/bigMario_goalL.png"));
+			goalR = ImageIO.read(getClass().getResourceAsStream("/mario/mario_goalR.png"));
+			goalL = ImageIO.read(getClass().getResourceAsStream("/mario/mario_goalL.png"));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
@@ -181,8 +186,48 @@ public class Mario extends GameObject{
 		velY += 1;
 	}
 	
+	private void slideDownPole() {
+		if(completeAnimationCounter == 0) {
+			if(world_y < pm.tileSize * 11) {
+				velY = 3;
+			}
+			if(world_y > pm.tileSize * 14 - height - 5) {
+				lookRight = false;
+				world_x += 5;
+			}
+		}
+	}
+	
+	private void completeAnimation() {
+		if(onFeet || completeAnimationCounter >= 2) {
+			completeAnimationCounter++;
+			if(velX != 3) {
+				velX = 3;
+			}
+		}
+	}
+	
 	public void update() {
-		if(dead) {
+		if(complete) {
+			slideDownPole();
+			completeAnimation();
+			if(completeAnimationCounter >= 2) {
+				applyGravity();
+			}else if(completeAnimationCounter == 1) {
+				lookRight = true;
+				pm.playSE(8);
+			}
+			if(completeAnimationCounter >= 110) {
+				visible = false;
+				pm.gameComplete = true;
+			}
+			pm.cManager.checkGroundCollision(this);
+			
+			world_y += velY;
+			screen_y = world_y;
+			world_x += velX;
+			screen_x += velX;
+		}else if(dead) {
 			if(deadAnimationCounter == 0) {
 				deadAnimationJump();
 				pm.playSE(2);
@@ -207,23 +252,70 @@ public class Mario extends GameObject{
 			world_y += velY;
 			screen_y = world_y;
 			
-			spriteCounter++;
-			if(spriteCounter > 5) {
-				if(spriteNum == 1) {
-					spriteNum = 2;
-				}else if(spriteNum == 2) {
-					spriteNum = 3;
-				}else if(spriteNum == 3) {
-					spriteNum = 1;
-				}
-				spriteCounter = 0;
+			if(world_y > pm.tileSize * 18) {
+				dead = true;
 			}
+		}
+		spriteCounter++;
+		if(spriteCounter > 5) {
+			if(spriteNum == 1) {
+				spriteNum = 2;
+			}else if(spriteNum == 2) {
+				spriteNum = 3;
+			}else if(spriteNum == 3) {
+				spriteNum = 1;
+			}
+			spriteCounter = 0;
 		}
 	}
 	
 	public void draw(Graphics2D g2) {
 		BufferedImage image = null;
-		if(dead) {
+		if(complete) {
+			if(form.equals("small")) {
+				if(completeAnimationCounter == 0) {
+					if(lookRight) {
+						image = goalR;
+					}else {
+						image = goalL;
+					}
+				}else {
+					if(spriteNum == 1) {
+						image = right1;
+					}
+					if(spriteNum == 2) {
+						image = right2;
+					}
+					if(spriteNum == 3) {
+						image = right3;
+					}
+				}
+			}else if(form.equals("big")) {
+				if(completeAnimationCounter == 0) {
+					if(lookRight) {
+						image = big_goalR;
+					}else {
+						image = big_goalL;
+					}
+				}else {
+					if(spriteNum == 1) {
+						image = big_right1;
+					}
+					if(spriteNum == 2) {
+						image = big_right2;
+					}
+					if(spriteNum == 3) {
+						image = big_right3;
+					}
+				}
+			}else {
+				if(lookRight) {
+					
+				}else {
+					
+				}
+			}
+		}else if(dead) {
 			image = gone;
 		}else {
 			if(form.equals("small")) {
@@ -296,6 +388,8 @@ public class Mario extends GameObject{
 				}
 			}
 		}
-		g2.drawImage(image, screen_x, screen_y, pm.tileSize, height, null);
+		if(visible) {
+			g2.drawImage(image, screen_x, screen_y, pm.tileSize, height, null);
+		}
 	}
 }

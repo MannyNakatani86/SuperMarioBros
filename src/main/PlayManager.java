@@ -9,7 +9,7 @@ import objects.TileManager;
 
 public class PlayManager {
 	
-	public boolean gameOver;
+	public boolean gameOver, gameComplete;
 	// Constants
 	public int tileSize, maxScreenCol, maxScreenRow, maxWorldCol, maxWorldRow;
 	// Objects
@@ -61,7 +61,7 @@ public class PlayManager {
 	}
 	
 	public void update() {
-		if(mario.dead) {
+		if(mario.dead || mario.complete) {
 			stopMusic();
 		}
 		if(!mario.dead) {
