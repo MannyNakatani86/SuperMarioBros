@@ -12,8 +12,11 @@ A faithful 2D clone of the original *Super Mario Bros*, developed using Java wit
 | 'D'       | Move right      |
 
 **📦 Assets & Resources**
+---
 All game assets (tiles, sprites, etc) used in this project are from:
 [Mario Universe](https://www.mariouniverse.com/sprites-nes-smb/#google_vignette)
+a fan archive hosting hosting ripped sprites and assets
+⚠️ Disclaimer: These assets are copyrighted by Nintendo and are used here for non-commercial, educational purposes only. This project is a fan creation and is not affiliated with or endorsed by Nintendo.
 
 **📷ScreenShots**
 ---
