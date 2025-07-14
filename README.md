@@ -2,6 +2,15 @@
 ---
 A faithful 2D clone of the original *Super Mario Bros*, developed using Java with the Java Swing Library from scrtach. 
 
+**Controls**
+---
+| Key       | Action          |
+|-----------|-----------------|
+|     W     | Jump            |
+|     A     | Move left       |
+|     S     | Crouch          |
+|     D     | Move right      |
+
 **ScreenShots**
 ---
 <img width="1004" height="1018" alt="screenshot1" src="https://github.com/user-attachments/assets/47ec55a9-f75c-4f2b-aeb9-972dac530d3a" />
