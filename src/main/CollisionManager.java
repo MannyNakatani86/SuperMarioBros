@@ -32,6 +32,7 @@ public class CollisionManager {
 							}
 							if(pm.tManager.mapTileNum[col][row] == 2) {
 								pm.tManager.mapTileNum[col][row] = 0; // if normal block, change to sky
+								pm.playSE(11);
 							}
 						}else {
 							if(isCollidingTileFromLeft(obj, col, row)) {
@@ -126,7 +127,7 @@ public class CollisionManager {
 				}else {
 					if(isCollidingEnemyFromLeft(obj, e)) {
 						if(obj instanceof Mario) {
-					//		((Mario) obj).levelDown();
+							((Mario) obj).levelDown();
 						}else {
 							obj.manageRight(e.world_x - pm.tileSize);
 						}
@@ -212,12 +213,12 @@ public class CollisionManager {
 		if(obj != null && i != null) {
 			if(isOverlappingItem(obj, i)) {
 				if(isCollidingItemFromBottom(obj, i)) {
-					if(i.hitCount == 0) {
-						i.visible = true;
-						i.hitCount ++;
-					}
+					i.visible = true;
+					i.hitCount++;
 				}
-				((Mario) obj).levelUp(i.name);
+				if(i.hitCount == 1 && i.canGetHit) {
+					i.hitCount++;
+				}
 			}
 		}
 	}
@@ -235,7 +236,7 @@ public class CollisionManager {
 	}
 
 	private boolean isCollidingItemFromBottom(GameObject obj, Items i) {
-		return obj.world_y > i.world_y + pm.tileSize && obj.velY <= 0;
+		return obj.world_y > i.world_y && obj.velY <= 0;
 	}
 	
 

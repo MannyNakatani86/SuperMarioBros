@@ -13,9 +13,9 @@ public class AssetSetter {
 	}
 	
 	public void setItems() {
-		pm.items[0] = new Mushroom();
+		pm.items[0] = new Mushroom(pm);
 		pm.items[0].world_x = 21 * pm.tileSize;
-		pm.items[0].world_y = 10 * pm.tileSize;
+		pm.items[0].world_y = 10 * pm.tileSize + 1;
 	}
 	
 	public void setEnemies() {
@@ -51,9 +51,9 @@ public class AssetSetter {
 		pm.enemies[7].world_x = 100 * pm.tileSize;
 		pm.enemies[7].world_y = 13 * pm.tileSize + 1;
 		
-		pm.enemies[8] = new Goomba(pm); // should be koopa troopa
+		pm.enemies[8] = new KoopaTroopa(pm);
 		pm.enemies[8].world_x = 108 * pm.tileSize;
-		pm.enemies[8].world_y = 12 * pm.tileSize + 1;
+		pm.enemies[8].world_y = 12 * pm.tileSize + 1 - 24;
 		
 		pm.enemies[9] = new Goomba(pm);
 		pm.enemies[9].world_x = 115 * pm.tileSize;

@@ -76,8 +76,10 @@ public class PlayManager {
 			}
 			for(int i = 0; i < items.length; i++) {
 				if(items[i] != null) {
-					cManager.checkItemCollision(mario, items[i]);
 					items[i].update();
+					if(items[i].dead) {
+						items[i] = null;
+					}
 				}
 			}
 		}

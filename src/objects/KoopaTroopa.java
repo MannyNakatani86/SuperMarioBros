@@ -15,6 +15,7 @@ public class KoopaTroopa extends Enemy{
 	public KoopaTroopa(PlayManager pm) {
 		super(pm);
 		lookRight = false;
+		height = 72; //tileSize * 2
 		
 		getImage();
 	}
@@ -24,10 +25,12 @@ public class KoopaTroopa extends Enemy{
 	}
 	
 	private void manageMovement() {
-		if(lookRight) {
-			velX = 1;
-		}else {
-			velX = -1;
+		if(canMove) {
+			if(lookRight) {
+				velX = 1;
+			}else {
+				velX = -1;
+			}
 		}
 	}
 	
@@ -50,24 +53,33 @@ public class KoopaTroopa extends Enemy{
 	
 	public void getImage() {
 		try {
-			// have to fix these images
-			image1 = ImageIO.read(getClass().getResourceAsStream("/enemy/koopaTroopaL.png"));
-			image2 = ImageIO.read(getClass().getResourceAsStream("/enemy/koopaTroopaL2.png"));
+			image1 = ImageIO.read(getClass().getResourceAsStream("/enemy/koopaTroopa_moveL1.png"));
+			image2 = ImageIO.read(getClass().getResourceAsStream("/enemy/koopaTroopa_moveL2.png"));
 		}catch(IOException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public void update() {
-		if(world_x > pm.mario.world_x - pm.mario.screen_x - pm.tileSize && world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 10 ) {
+		if(stepped) {
+			deadAnimationCounter++;
+			if(deadAnimationCounter == 7) {
+				dead = true;
+			}
+		}else {
+			if(world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 14) {
+				canMove = true;
+			}
 			manageMovement();
 			applyGravity();
 			pm.cManager.checkTileCollision(this);
+			for(int i = 0; i < pm.enemies.length; i++) {
+				pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
+			}
 			
 			world_x += velX;
 			world_y += velY;
-			screen_x += velX;
-			screen_y += velY;
+			
 			
 			spriteCounter++;
 			if(spriteCounter > 10) {
@@ -91,7 +103,7 @@ public class KoopaTroopa extends Enemy{
 		int screen_x = world_x - pm.mario.world_x + pm.mario.screen_x;
 		int screen_y = world_y;
 		if(world_x > pm.mario.world_x - pm.mario.screen_x - pm.tileSize && world_x < pm.mario.world_x + pm.mario.screen_x + pm.tileSize * 10) {
-		//	g2.drawImage(image,  screen_x,  screen_y,  pm.tileSize, pm.tileSize * 2, null);
+			g2.drawImage(image,  screen_x,  screen_y,  pm.tileSize, height, null);
 		}
 	}
 }
