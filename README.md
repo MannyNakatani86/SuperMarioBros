@@ -6,10 +6,10 @@ A faithful 2D clone of the original *Super Mario Bros*, developed using Java wit
 ---
 | Key       | Action          |
 |-----------|-----------------|
-|     W     | Jump            |
-|     A     | Move left       |
-|     S     | Crouch          |
-|     D     | Move right      |
+| 'W'       | Jump            |
+| 'A'       | Move left       |
+| 'S'       | Crouch          |
+| 'D'       | Move right      |
 
 **ScreenShots**
 ---
