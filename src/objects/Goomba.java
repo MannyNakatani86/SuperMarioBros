@@ -36,7 +36,6 @@ public class Goomba extends Enemy{
 	
 	public void manageLanding(int y) {
 		world_y = y - height + 1;
-		screen_y = world_y;
 		onFeet = true;
 		velY = 0;
 	}
@@ -80,8 +79,7 @@ public class Goomba extends Enemy{
 			
 			world_x += velX;
 			world_y += velY;
-			screen_x += velX;
-			screen_y -= velY;
+			
 			
 			spriteCounter++;
 			if(spriteCounter > 10) {

@@ -11,6 +11,8 @@ public class Mushroom extends Items{
 	public Mushroom(PlayManager pm) {
 		super(pm);
 		name = "mushroom";
+		height = pm.tileSize;
+		lookRight = true;
 		try {
 			image = ImageIO.read(getClass().getResourceAsStream("/objects/mushroom.png"));
 		}catch(IOException e) {
@@ -18,26 +20,11 @@ public class Mushroom extends Items{
 		}
 	}
 	
-	public void hitAnimation() {
-		if(animationCounter <= 11) {
-			world_y -= 4;
+	private void manageMovement() {
+		if(lookRight) {
+			velX = 3;
 		}else {
-			world_x += 4;
-		}
-		
-	}
-	
-	private void applyGravity() {		
-		if(velY <= 0) {
-			velY += 3; // gravity when jumping upwards
-		}else {
-			velY += 5; // gravity when going downwards
-			if(velY > 18) {
-				velY = 18; // max falling speed
-			}
-		}
-		if(onFeet) {
-			velY = 0;
+			velX = -3;
 		}
 	}
 	
@@ -49,9 +36,38 @@ public class Mushroom extends Items{
 	
 	public void update() {
 		if(hitCount == 1) {
-			hitAnimation();
-			animationCounter++;
-			applyGravity();
+			if(animationCounter == 0) {
+				pm.playSE(9);
+			}
+			if(animationCounter <= 47) {
+				hitAnimation();
+			}else {
+				if(animationCounter == 48) {
+					canGetHit = true;
+					velY = 0;
+				}
+				manageMovement();
+				applyGravity();
+				pm.cManager.checkTileCollision(this);
+				for(int i = 0; i < pm.enemies.length; i++) {
+					pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
+				}
+			}
+		}else if(hitCount == 2) {
+			dead = true;
+			pm.mario.levelUp(name);
 		}
+		world_x += velX;
+		world_y += velY;
+	}
+
+	public void manageRight(int x) {
+		world_x = x;
+		lookRight = false;
+	}
+
+	public void manageLeft(int x) {
+		world_x = x;
+		lookRight = true;
 	}
 }

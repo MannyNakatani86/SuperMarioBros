@@ -13,7 +13,7 @@ public class Mario extends GameObject{
 	String form;
 	boolean jump, crouch;
 	public boolean dead, complete, visible = true;
-	int completeAnimationCounter = 0;
+	int completeAnimationCounter = 0, immuneCounter = 60;
 	public BufferedImage stillR, stillL, jumpR, jumpL, left1, left2, left3, 
 	right1, right2, right3, big_stillR, big_stillL, big_jumpR, big_jumpL, big_left1,
 	big_left2, big_left3, big_right1, big_right2, big_right3, gone, big_goalR, big_goalL, goalR, goalL;
@@ -21,9 +21,9 @@ public class Mario extends GameObject{
 	public Mario(PlayManager pm) {
 		super(pm);
 		screen_x = pm.tileSize * 3;
-		screen_y = pm.tileSize * 12 + 1;
+		screen_y = pm.tileSize * 13 + 1;
 		lookRight = true;
-		form = "big";
+		form = "small";
 		
 		setDefaultValues();
 		getImage();
@@ -31,8 +31,8 @@ public class Mario extends GameObject{
 	
 	public void setDefaultValues() {
 		world_x = pm.tileSize * 3;
-		world_y = pm.tileSize * 12 + 1;
-		height = pm.tileSize * 2;
+		world_y = pm.tileSize * 13 + 1;
+		height = pm.tileSize;
 	}
 	
 	public void getImage() {
@@ -69,6 +69,7 @@ public class Mario extends GameObject{
 	
 	public void levelUp(String item) {
 		if(form.equals("small")) {
+			pm.playSE(6);
 			form = "big";
 			world_y -= pm.tileSize;
 			height = pm.tileSize * 2;
@@ -78,16 +79,24 @@ public class Mario extends GameObject{
 	}
 	
 	public void levelDown() {
-		if(form.equals("big")){
-			form = "small";
-			world_y += pm.tileSize;
-			height = pm.tileSize;
-		}else if(form.equals("fire")) {
-			form = "big";
-		}else if(form.equals("small")){
-			System.out.println("dead");
-			dead = true;
+		if(immuneCounter == 60) {
+			if(form.equals("big")){
+				pm.playSE(10);
+				form = "small";
+				world_y += pm.tileSize;
+				height = pm.tileSize;
+			}else if(form.equals("fire")) {
+				form = "big";
+			}else if(form.equals("small")){
+				System.out.println("dead");
+				dead = true;
+			}
+			startImmuneCounter();
 		}
+	}
+	
+	private void startImmuneCounter() {
+		immuneCounter--;
 	}
 	
 	public void walkRightRequest() {
@@ -257,6 +266,9 @@ public class Mario extends GameObject{
 			for(int i = 0; i < pm.enemies.length; i++) {
 				pm.cManager.checkEnemyCollision(this, pm.enemies[i]);
 			}
+			for(int i = 0; i < pm.items.length; i++) {
+				pm.cManager.checkItemCollision(this, pm.items[i]);
+			}
 			
 			world_x += velX;
 			world_y += velY;
@@ -265,6 +277,12 @@ public class Mario extends GameObject{
 			if(world_y > pm.tileSize * 18) {
 				dead = true;
 			}
+		}
+		if(immuneCounter < 60) {
+			immuneCounter--;
+		}
+		if(immuneCounter == 0) {
+			immuneCounter = 60;
 		}
 		spriteCounter++;
 		if(spriteCounter > 5) {

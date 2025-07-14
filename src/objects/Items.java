@@ -5,21 +5,36 @@ import java.awt.image.BufferedImage;
 
 import main.PlayManager;
 
-public abstract class Items {
+public abstract class Items extends GameObject{
 	
-	PlayManager pm;
 	public BufferedImage image;
 	public String name;
 	public int hitCount = 0;
-	public boolean collision = false, visible = false, onFeet;
+	public boolean collision = false, visible = false, canMove = false, dead, canGetHit;
 	public int animationCounter = 0;
-	public int world_x, world_y, velX = 0, velY = 0;
 	
 	public Items(PlayManager pm) {
-		this.pm = pm;
+		super(pm);
+		onFeet = false;
 	}
 	
-	public abstract void hitAnimation();
+	public void hitAnimation() {
+		if(animationCounter <= 11) {
+			velY = -1;
+		}
+		animationCounter++;
+	}
+	
+	public void applyGravity() {
+		velY += 5; // gravity when going downwards
+		if(velY > 18) {
+			velY = 18; // max falling speed
+		}
+		
+		if(onFeet) {
+			velY = 0;
+		}
+	}
 	
 	public void draw(Graphics2D g2, PlayManager pm) {
 		int screen_x = world_x - pm.mario.world_x + pm.mario.screen_x;
